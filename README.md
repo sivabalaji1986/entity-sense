@@ -168,9 +168,44 @@ ollama pull nomic-embed-text
 mvn spring-boot:run -Dentity_db_password=<<ENTITY_PASSWORD_TO_BE_USED>>
 ```
 
-Access Swagger at: [http://localhost:8688/swagger-ui/index.html](http://localhost:8688/swagger-ui/index.html)
+### Access Swagger at: [http://localhost:8688/swagger-ui/index.html](http://localhost:8688/swagger-ui/index.html)
+![Swagger UI](resources/Images/Swagger_Validate_Payment.png)
 
-Access Actuator URL at: [http://localhost:8688/actuator/health](http://localhost:8688/actuator/health)
+### Access OpenAPI Spec at: [http://localhost:8688/v3/api-docs](http://localhost:8688/v3/api-docs)
+![OpenAPI Spec](resources/Images/OpenAPI_Specs.png)
+
+### Access Actuator at: [http://localhost:8688/actuator/health](http://localhost:8688/actuator/health)
+
+## Seed Data
+
+I have provided a convenient HTTP file, `Sample‑WatchList.http`, that contains 20 `POST /api/create‑watch‑list‑entity` requests to populate your watchlist with all risk categories.
+
+### With IntelliJ HTTP Client
+
+1. Make sure you’re running the app:  
+   ```bash
+   mvn spring-boot:run -Dentity_db_password=<YOUR_DB_PASSWORD>
+   ```
+
+2. In IntelliJ, open the Sample‑WatchList.http file (its under resources/APITesting).
+
+3. Click the ▶️ gutter icon next to “### 1) SANCTION: Global Arms Inc” (or any individual request) to run it, or right‑click in the editor and choose “Run All Requests” to execute all 20 in sequence.
+
+4. You should see 200 OK for each. Your database is now seeded.
+
+Once complete, you can verify entries in the DB or simply call:
+```bash
+curl --location 'http://localhost:8688/api/validate-payment' \
+--header 'Content-Type: application/json' \
+--data '{
+    "payeeName": "Phantom Technology",
+    "payeeAddress": "Silicon",
+    "payeeCountry": "ukraine",
+    "accountNumber": "1234567890"
+}'
+```
+![Curl Test](resources/Images/Curl_Test.png)
+
 
 ---
 
