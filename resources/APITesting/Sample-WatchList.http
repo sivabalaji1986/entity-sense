@@ -18,7 +18,7 @@ Content-Type: application/json
   "name": "Eastern Trust",
   "address": "89 Border Lane",
   "country": "North Korea",
-  "knownAccounts": ["NK9876543210"],
+  "knownAccounts": ["NK9876543210", "NK9876543211"],
   "riskCategory": "SANCTION"
 }
 
@@ -66,7 +66,7 @@ Content-Type: application/json
   "name": "Carlos Mendoza",
   "address": "Barrio Centro",
   "country": "Mexico",
-  "knownAccounts": ["MX4444555566"],
+  "knownAccounts": ["MX4444555566", "MX4444555567"],
   "riskCategory": "MULE"
 }
 
@@ -90,7 +90,7 @@ Content-Type: application/json
   "name": "Rainbow Exchange",
   "address": "42 Beach Road",
   "country": "UAE",
-  "knownAccounts": ["AE1234432112"],
+  "knownAccounts": ["AE1234432112", "AE1234432113"],
   "riskCategory": "MONEY_LAUNDERING"
 }
 
@@ -102,7 +102,7 @@ Content-Type: application/json
   "name": "Golden Transfer",
   "address": "150 Central Ave",
   "country": "Panama",
-  "knownAccounts": ["PA1111222233"],
+  "knownAccounts": ["PA1111222233", "PA1111222234", "PA1111222235"],
   "riskCategory": "MONEY_LAUNDERING"
 }
 
