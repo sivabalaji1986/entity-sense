@@ -1,4 +1,3 @@
-#
 server:
   port: 8688
   servlet:

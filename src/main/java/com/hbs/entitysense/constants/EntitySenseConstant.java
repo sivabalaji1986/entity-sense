@@ -14,4 +14,8 @@ public class EntitySenseConstant {
 
     public static final String OPEN_API_SPEC_VERSION      = "1.0.0";
 
+    public static final String OLLAMA_EMBEDDINGS_REQ_MODEL_KEY      = "model";
+
+    public static final String OLLAMA_EMBEDDINGS_REQ_PROMPT_KEY      = "prompt";
+
 }
