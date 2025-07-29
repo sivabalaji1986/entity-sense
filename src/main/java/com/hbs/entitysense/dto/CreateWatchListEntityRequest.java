@@ -11,6 +11,6 @@ public class CreateWatchListEntityRequest {
     @NotBlank private String name;
     private String address;
     private String country;
-    private List<String> knownAccounts;
+    private String[] knownAccounts;
     private RiskCategory riskCategory;
 }

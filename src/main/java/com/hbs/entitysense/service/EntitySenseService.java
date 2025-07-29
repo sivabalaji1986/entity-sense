@@ -18,6 +18,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +49,7 @@ public class EntitySenseService {
         entity.setName(request.getName());
         entity.setAddress(request.getAddress());
         entity.setCountry(request.getCountry());
-        entity.setKnownAccounts(request.getKnownAccounts());
+        entity.setKnownAccounts( (request.getKnownAccounts()));
         entity.setRiskCategory(request.getRiskCategory());
         entity.setEmbedding(embedding);
         repository.save(entity);
@@ -60,7 +61,7 @@ public class EntitySenseService {
         List<RiskMatchResult> matches = repository.findAll().stream()
                 .map(entity -> {
                     double distance = cosineDistance(inputEmbedding, entity.getEmbedding());
-                    boolean accountMatch = entity.getKnownAccounts() != null && entity.getKnownAccounts().contains(request.getAccountNumber());
+                    boolean accountMatch = entity.getKnownAccounts() != null && Arrays.asList(entity.getKnownAccounts()).contains(request.getAccountNumber());
                     RiskMatchResult result = new RiskMatchResult();
                     result.setId(entity.getId());
                     result.setName(entity.getName());
