@@ -170,6 +170,8 @@ mvn spring-boot:run -Dentity_db_password=<<ENTITY_PASSWORD_TO_BE_USED>>
 
 Access Swagger at: [http://localhost:8688/swagger-ui/index.html](http://localhost:8688/swagger-ui/index.html)
 
+Access Actuator URL at: [http://localhost:8688/actuator/health](http://localhost:8688/actuator/health)
+
 ---
 
 # Happy coding!
