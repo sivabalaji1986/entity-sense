@@ -88,7 +88,7 @@ public class EntitySenseService {
             String json = objectMapper.writeValueAsString(body);
             logger.info("JSON request for Ollama embedding: {}", json);
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(OLLAMA_URL))
+                    .uri(URI.create(OLLAMA_URL+OLLAMA_EMBEDDINGS_URL))
                     .timeout(Duration.ofSeconds(10))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(json))
