@@ -14,6 +14,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.hbs.entitysense.constants.EntitySenseConstant.OLLAMA_EMBEDDINGS_REQ_MODEL_VALUE;
+import static com.hbs.entitysense.constants.EntitySenseConstant.OLLAMA_EMBEDDINGS_URL;
+
 @Service
 @RequiredArgsConstructor
 public class EntitySenseService {
@@ -61,8 +64,8 @@ public class EntitySenseService {
     private float[] generateEmbedding(String name, String address, String country) {
         String prompt = String.join(" ‖ ", name, address != null ? address : "", country != null ? country : "");
         OllamaEmbeddingResponse response = ollamaClient.post()
-                .uri("/api/embeddings")
-                .bodyValue(new OllamaEmbeddingRequest("nomic-embed-text", prompt))
+                .uri(OLLAMA_EMBEDDINGS_URL)
+                .bodyValue(new OllamaEmbeddingRequest(OLLAMA_EMBEDDINGS_REQ_MODEL_VALUE, prompt))
                 .retrieve()
                 .bodyToMono(OllamaEmbeddingResponse.class)
                 .onErrorResume(e -> Mono.error(new RuntimeException("Failed to fetch embedding")))
