@@ -155,7 +155,7 @@ public class EntitySenseServiceTest {
         req.setAddress("B");
         req.setCountry("US");
         req.setRiskCategory(RiskCategory.CYBER_THREAT);
-        req.setKnownAccounts(List.of("ACC1"));
+        req.setKnownAccounts(new String[]{"AC1"});
 
         assertDoesNotThrow(() -> entitySenseService.createWatchListEntity(req));
         verify(watchlistRepository).save(captor.capture());
@@ -175,7 +175,7 @@ public class EntitySenseServiceTest {
         req.setAddress("X");
         req.setCountry("Y");
         req.setRiskCategory(RiskCategory.PEP);
-        req.setKnownAccounts(List.of("AC1"));
+        req.setKnownAccounts(new String[]{"AC1"});
 
         // since the service throws RuntimeException when embedding generation fails
         assertThrows(RuntimeException.class, () -> entitySenseService.createWatchListEntity(req));
@@ -199,7 +199,7 @@ public class EntitySenseServiceTest {
         e.setName("TestEntity");
         e.setAddress("TestAddress");
         e.setCountry("US");
-        e.setKnownAccounts(List.of("ACC123", "ACC456"));
+        e.setKnownAccounts(new String[]{"ACC123","ACC456"});
         e.setRiskCategory(RiskCategory.MULE);
 
         float[] arr = new float[768];
