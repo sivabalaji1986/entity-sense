@@ -1,12 +1,15 @@
 package com.hbs.entitysense.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hbs.entitysense.controller.EntitySenseController;
 import com.hbs.entitysense.dto.*;
 import com.hbs.entitysense.entity.WatchlistEntity;
 import com.hbs.entitysense.repository.WatchlistRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -30,9 +33,14 @@ public class EntitySenseService {
     private final WatchlistRepository repository;
     private final ObjectMapper objectMapper;
 
+    private static final Logger logger = LoggerFactory.getLogger(EntitySenseService.class);
+
     public void createWatchListEntity(CreateWatchListEntityRequest request) {
+        logger.info("Creating watch list entity: {}", request);
         float[] embedding = generateEmbedding(request.getName(), request.getAddress(), request.getCountry());
+        logger.info("Generated embedding for entity {}: {}", request.getName(), embedding);
         if (embedding == null) {
+            logger.error("Failed to generate embedding for entity: {}", request.getName());
             throw new RuntimeException("Failed to generate embedding for entity: " + request.getName());
         }
 
@@ -74,25 +82,29 @@ public class EntitySenseService {
     private float[] generateEmbedding(String name, String address, String country) {
         try {
             String text = String.join(" ‖ ", name, address != null ? address : "", country != null ? country : "");
+            logger.info("Generating embedding for text: {}", text);
             Map<String, Object> body = Map.of(OLLAMA_EMBEDDINGS_REQ_MODEL_KEY, OLLAMA_EMBEDDINGS_REQ_MODEL_VALUE, OLLAMA_EMBEDDINGS_REQ_PROMPT_KEY, text);
+            logger.info("Request body for Ollama embedding: {}", body);
             String json = objectMapper.writeValueAsString(body);
-
+            logger.info("JSON request for Ollama embedding: {}", json);
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(OLLAMA_URL))
                     .timeout(Duration.ofSeconds(10))
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(json))
                     .build();
-
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            OllamaEmbeddingResponse embResp = objectMapper.readValue(response.body(), OllamaEmbeddingResponse.class);
-            List<Float> list = embResp.getEmbedding();
+            logger.info("Received response from Ollama: {}", response.body());
+            OllamaEmbeddingResponse ollamaEmbeddingResponse = objectMapper.readValue(response.body(), OllamaEmbeddingResponse.class);
+            logger.info("Parsed Ollama embedding response: {}", ollamaEmbeddingResponse);
+            List<Float> list = ollamaEmbeddingResponse.getEmbedding();
             if (list == null) return null;
             float[] arr = new float[list.size()];
             for (int i = 0; i < list.size(); i++) arr[i] = list.get(i);
             return arr;
         } catch (IOException | InterruptedException ex) {
             Thread.currentThread().interrupt();
+            logger.error("Error generating embedding - {}", ex.getMessage());
             throw new RuntimeException("Failed to generate embedding", ex);
         }
     }
