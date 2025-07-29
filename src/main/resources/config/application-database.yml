@@ -6,7 +6,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     # HikariCP specific settings
     hikari:
-      pool-name: MuleTrapPool
+      pool-name: EntitySensePool
       minimum-idle: 5              # how many idle connections Hikari tries to maintain
       maximum-pool-size: 20        # the maximum number of actual connections
       connection-timeout: 30000    # max wait for a connection (ms) before timing out
