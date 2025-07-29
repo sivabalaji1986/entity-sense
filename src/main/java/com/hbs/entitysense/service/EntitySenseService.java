@@ -60,14 +60,24 @@ public class EntitySenseService {
 
     private float[] generateEmbedding(String name, String address, String country) {
         String prompt = String.join(" ‖ ", name, address != null ? address : "", country != null ? country : "");
-        EmbeddingResponse response = ollamaClient.post()
+        OllamaEmbeddingResponse response = ollamaClient.post()
                 .uri("/api/embeddings")
                 .bodyValue(new OllamaEmbeddingRequest("nomic-embed-text", prompt))
                 .retrieve()
-                .bodyToMono(EmbeddingResponse.class)
+                .bodyToMono(OllamaEmbeddingResponse.class)
                 .onErrorResume(e -> Mono.error(new RuntimeException("Failed to fetch embedding")))
                 .block();
-        return response != null ? response.getEmbedding() : new float[768];
+        if (response == null || response.getEmbedding() == null) {
+            throw new IllegalStateException("Embedding generation failed");
+        }
+
+        List<Float> embeddingList = response.getEmbedding();
+        float[] embedding = new float[embeddingList.size()];
+        for (int i = 0; i < embeddingList.size(); i++) {
+            embedding[i] = embeddingList.get(i);
+        }
+
+        return embedding;
     }
 
     @Data
