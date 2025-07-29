@@ -74,6 +74,9 @@ public class EntitySenseService {
                     result.setRiskCategory(entity.getRiskCategory());
                     result.setDistance(distance);
                     result.setMatchedAccount(accountMatch);
+                    result.setAddress(entity.getAddress());
+                    result.setCountry(entity.getCountry());
+                    result.setKnownAccounts(entity.getKnownAccounts());
                     return result;
                 })
                 .filter(result -> result.getDistance() < 0.4 || result.isMatchedAccount())

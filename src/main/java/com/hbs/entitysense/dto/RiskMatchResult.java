@@ -10,4 +10,7 @@ public class RiskMatchResult {
     private RiskCategory riskCategory;
     private boolean matchedAccount;
     private double distance;
+    private String[] knownAccounts;
+    private String address;
+    private String country;
 }
