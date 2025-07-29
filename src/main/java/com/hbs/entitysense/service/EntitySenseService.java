@@ -56,7 +56,13 @@ public class EntitySenseService {
     }
 
     public ValidatePaymentResponse validatePayment(ValidatePaymentRequest request) {
+        logger.info("Validating payment for request: {}", request);
         float[] inputEmbedding = generateEmbedding(request.getPayeeName(), request.getPayeeAddress(), request.getPayeeCountry());
+        if( inputEmbedding == null) {
+            logger.error("Failed to generate embedding for payee: {}", request.getPayeeName());
+            throw new RuntimeException("Failed to generate embedding for payee: " + request.getPayeeName());
+        }
+        logger.info("Generated embedding for payee {}: {}", request.getPayeeName(), Arrays.toString(inputEmbedding));
 
         List<RiskMatchResult> matches = repository.findAll().stream()
                 .map(entity -> {
@@ -70,13 +76,19 @@ public class EntitySenseService {
                     result.setMatchedAccount(accountMatch);
                     return result;
                 })
-                .filter(result -> result.getDistance() < 0.3 || result.isMatchedAccount())
+                .filter(result -> result.getDistance() < 0.4 || result.isMatchedAccount())
                 .sorted(Comparator.comparingDouble(RiskMatchResult::getDistance))
                 .collect(Collectors.toList());
 
+        logger.info("Found {} potential matches for payee {}", matches.size(), request.getPayeeName());
         ValidatePaymentResponse response = new ValidatePaymentResponse();
         response.setPossibleWatchListEntityMatches(matches);
         response.setStatus(matches.isEmpty() ? "ALLOW" : "BLOCK");
+        if (!matches.isEmpty()) {
+            logger.warn("Payment blocked due to potential match with watch list entities {}", response);
+        } else {
+            logger.info("Payment allowed, no matches found {}", response);
+        }
         return response;
     }
 
