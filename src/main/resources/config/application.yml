@@ -1,0 +1,29 @@
+#
+server:
+  port: 8688
+  servlet:
+    contextPath: /entity-sense
+
+spring:
+  profiles:
+    include: database
+
+logging:
+  file:
+    name: logs/entity-sense.log
+  level:
+    root: INFO
+
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
