@@ -36,7 +36,7 @@ A Spring Boot 3.5.4 application that uses vector similarity search (via `pgvecto
 | `/api/validate-payment`        | POST   | Validates if a payee is a potential match to watchlist entities |
 | `/api/create-watch-list-entity` | POST   | Adds a new high-risk entity to the database                 |
 
-> 🔍 Swagger UI: [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+> 🔍 Swagger UI: [http://localhost:8688/swagger-ui/index.html](http://localhost:8688/swagger-ui/index.html)
 
 ---
 
@@ -61,7 +61,7 @@ A Spring Boot 3.5.4 application that uses vector similarity search (via `pgvecto
 -- Connect to Postgres instance
 psql postgres
 
--- Create a dedicated DB user for the app
+-- Create a dedicated DB user for the app - Replace ENTITY_PASSWORD_TO_BE_USED with your actual Password
 CREATE USER entityadmin WITH ENCRYPTED PASSWORD '<<ENTITY_PASSWORD_TO_BE_USED>>';
 
 -- Enable pgvector extension (required for vector storage & similarity search)
@@ -77,6 +77,7 @@ CREATE DATABASE entitydb;
 GRANT ALL PRIVILEGES ON DATABASE entitydb TO entityadmin;
 
 \du  -- Check user privileges
+
 exit
 
 -- Connect to the app DB
@@ -89,7 +90,7 @@ CREATE SCHEMA entitysenseschema;
 ALTER SCHEMA entitysenseschema OWNER TO entityadmin;
 
 -- Allow user to use and create in schema
-GRANT USAGE, CREATE ON SCHEMA entitysenseschema TO entityadmin;
+GRANT USAGE, SELECT, INSERT, UPDATE, DELETE ON entitysenseschema TO entityadmin;
 
 -- =============================
 -- Watchlist Entities Table
@@ -164,11 +165,11 @@ cd entity-sense
 # Pull embedding model
 ollama pull nomic-embed-text
 
-# Start the app
-mvn spring-boot:run
+# Start the app (pass the DB Password as VM Argument)
+mvn spring-boot:run -Dentity_db_password=<<ENTITY_PASSWORD_TO_BE_USED>>
 ```
 
-Access Swagger at: [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+Access Swagger at: [http://localhost:8688/swagger-ui/index.html](http://localhost:8688/swagger-ui/index.html)
 
 ---
 
