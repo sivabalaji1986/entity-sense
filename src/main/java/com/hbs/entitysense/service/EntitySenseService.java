@@ -32,6 +32,10 @@ public class EntitySenseService {
 
     public void createWatchListEntity(CreateWatchListEntityRequest request) {
         float[] embedding = generateEmbedding(request.getName(), request.getAddress(), request.getCountry());
+        if (embedding == null) {
+            throw new RuntimeException("Failed to generate embedding for entity: " + request.getName());
+        }
+
         WatchlistEntity entity = new WatchlistEntity();
         entity.setName(request.getName());
         entity.setAddress(request.getAddress());
