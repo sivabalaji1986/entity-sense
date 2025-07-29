@@ -2,7 +2,7 @@ package com.hbs.entitysense.service;
 
 import com.hbs.entitysense.dto.*;
 import com.hbs.entitysense.entity.WatchlistEntity;
-import com.hbs.entitysense.repository.WatchlistEntityRepository;
+import com.hbs.entitysense.repository.WatchlistRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class EntitySenseService {
 
     private final WebClient ollamaClient;
-    private final WatchlistEntityRepository repository;
+    private final WatchlistRepository repository;
 
     public void createWatchListEntity(CreateWatchListEntityRequest request) {
         float[] embedding = generateEmbedding(request.getName(), request.getAddress(), request.getCountry());
