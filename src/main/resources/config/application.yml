@@ -1,7 +1,5 @@
 server:
   port: 8688
-  servlet:
-    contextPath: /entity-sense
 
 spring:
   profiles:
