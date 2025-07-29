@@ -23,10 +23,8 @@ public class WatchlistEntity {
     private String address;
     private String country;
 
-    @ElementCollection
-    @CollectionTable(name = "entity_accounts", joinColumns = @JoinColumn(name = "entity_id"))
-    @Column(name = "account")
-    private List<String> knownAccounts;
+    @Column(name = "known_accounts", columnDefinition = "text[]")
+    private String[] knownAccounts;
 
     @Enumerated(EnumType.STRING)
     private RiskCategory riskCategory;
