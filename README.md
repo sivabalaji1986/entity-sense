@@ -121,16 +121,6 @@ CREATE TABLE entitysenseschema.watchlist_entities (
   created_at TIMESTAMP DEFAULT now()
 );
 
--- The collection table for knownAccounts
-CREATE TABLE entitysenseschema.entity_accounts (
-  entity_id BIGINT    NOT NULL,
-  account   TEXT      NOT NULL,
-  CONSTRAINT fk_entity
-    FOREIGN KEY(entity_id)
-    REFERENCES entitysenseschema.watchlist_entities(id)
-    ON DELETE CASCADE
-);
-
 -- =============================
 -- Vector Index (HNSW)
 -- =============================
