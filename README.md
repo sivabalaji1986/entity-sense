@@ -58,53 +58,79 @@ A Spring Boot 3.5.4 application that uses vector similarity search (via `pgvecto
 
 ```sql
 
+-- Connect to Postgres instance
 psql postgres
 
+-- Create a dedicated DB user for the app
 CREATE USER entityadmin WITH ENCRYPTED PASSWORD '<<ENTITY_PASSWORD_TO_BE_USED>>';
 
--- Enable vector support
+-- Enable pgvector extension (required for vector storage & similarity search)
 CREATE EXTENSION IF NOT EXISTS vector;
 
+-- Allow the user to create databases
 ALTER ROLE entityadmin CREATEDB;
 
+-- Create the actual app database
 CREATE DATABASE entitydb;
 
+-- Grant full rights to the app user
 GRANT ALL PRIVILEGES ON DATABASE entitydb TO entityadmin;
 
-\du
-
+\du  -- Check user privileges
 exit
 
+-- Connect to the app DB
 psql entitydb
 
+-- Create a dedicated schema for app isolation
 CREATE SCHEMA entitysenseschema;
 
+-- Assign schema ownership to our app user
 ALTER SCHEMA entitysenseschema OWNER TO entityadmin;
 
+-- Allow user to use and create in schema
 GRANT USAGE, CREATE ON SCHEMA entitysenseschema TO entityadmin;
 
--- Watchlist Table
+-- =============================
+-- Watchlist Entities Table
+-- =============================
+-- Stores high-risk entities including sanctioned, mule, laundering, etc.
 CREATE TABLE entitysenseschema.watchlist_entities (
   id SERIAL PRIMARY KEY,
+  
+  -- Basic entity details
   name TEXT NOT NULL,
   address TEXT,
   country TEXT,
+  
+  -- Optional array of known account numbers linked to this entity
   known_accounts TEXT[],
+  
+  -- Categorical risk tag (enum-style enforcement)
   risk_category TEXT CHECK (
     risk_category IN (
       'SANCTION', 'MULE', 'MONEY_LAUNDERING',
       'CYBER_THREAT', 'SHELL_ENTITY', 'PEP', 'SCAM_ENTITY'
     )
   ),
+
+  -- 768-dimension embedding vector generated from entity info
   embedding VECTOR(768),
+
+  -- Timestamp of when entity was added
   created_at TIMESTAMP DEFAULT now()
 );
 
--- Vector Index for fast similarity search
+-- =============================
+-- Vector Index (HNSW)
+-- =============================
+-- Enables fast similarity search over the 768-dim vectors using HNSW (Hierarchical Navigable Small World) index.
+-- This ensures near real-time lookups for similar entities.
 CREATE INDEX idx_watchlist_embedding_hnsw
   ON entitysenseschema.watchlist_entities
   USING hnsw (embedding vector_l2_ops)
   WITH (m = 16, ef_construction = 200);
+
 ```
 
 ---
