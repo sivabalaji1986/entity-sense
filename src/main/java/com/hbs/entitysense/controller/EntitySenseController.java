@@ -23,7 +23,7 @@ public class EntitySenseController {
 
     @PostMapping("/create-watch-list-entity")
     @Operation(summary = "Create Watch List Entity", description = "Add a new sanctioned or high-risk entity to the watchlist")
-    public ResponseEntity<String> createWatchListEntity(@Valid @RequestBody CreateWatchListEntityRequest request) {
+    public ResponseEntity<String> createWatchListEntity(@Valid @RequestBody WatchListEntityRequest request) {
         logger.info("Received request to create watch list entity: {}", request);
         entitySenseService.createWatchListEntity(request);
         return ResponseEntity.ok("Entity created successfully");

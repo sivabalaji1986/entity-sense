@@ -1,6 +1,6 @@
 package com.hbs.entitysense.service;
 
-import com.hbs.entitysense.dto.CreateWatchListEntityRequest;
+import com.hbs.entitysense.dto.WatchListEntityRequest;
 import com.hbs.entitysense.dto.OllamaEmbeddingResponse;
 import com.hbs.entitysense.dto.ValidatePaymentRequest;
 import com.hbs.entitysense.dto.ValidatePaymentResponse;
@@ -150,7 +150,7 @@ public class EntitySenseServiceTest {
         ArgumentCaptor<WatchlistEntity> captor = ArgumentCaptor.forClass(WatchlistEntity.class);
         when(watchlistRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
 
-        CreateWatchListEntityRequest req = new CreateWatchListEntityRequest();
+        WatchListEntityRequest req = new WatchListEntityRequest();
         req.setName("B");
         req.setAddress("B");
         req.setCountry("US");
@@ -170,7 +170,7 @@ public class EntitySenseServiceTest {
         // Stub Ollama to return null embedding list
         stubOllamaNull();
 
-        CreateWatchListEntityRequest req = new CreateWatchListEntityRequest();
+        WatchListEntityRequest req = new WatchListEntityRequest();
         req.setName("NullTest");
         req.setAddress("X");
         req.setCountry("Y");
@@ -226,7 +226,7 @@ public class EntitySenseServiceTest {
         ArgumentCaptor<WatchlistEntity> captor = ArgumentCaptor.forClass(WatchlistEntity.class);
         when(watchlistRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
 
-        CreateWatchListEntityRequest req = new CreateWatchListEntityRequest();
+        WatchListEntityRequest req = new WatchListEntityRequest();
         req.setName("TestEntity");
         req.setAddress(null); // null address
         req.setCountry(null); // null country

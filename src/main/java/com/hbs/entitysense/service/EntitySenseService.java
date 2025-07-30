@@ -1,12 +1,9 @@
 package com.hbs.entitysense.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hbs.entitysense.controller.EntitySenseController;
 import com.hbs.entitysense.dto.*;
 import com.hbs.entitysense.entity.WatchlistEntity;
 import com.hbs.entitysense.repository.WatchlistRepository;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,12 +28,12 @@ import static com.hbs.entitysense.constants.EntitySenseConstant.*;
 public class EntitySenseService {
 
     private final HttpClient httpClient;
-    private final WatchlistRepository repository;
+    private final WatchlistRepository watchlistRepository;
     private final ObjectMapper objectMapper;
 
     private static final Logger logger = LoggerFactory.getLogger(EntitySenseService.class);
 
-    public void createWatchListEntity(CreateWatchListEntityRequest request) {
+    public void createWatchListEntity(WatchListEntityRequest request) {
         logger.info("Creating watch list entity: {}", request);
         float[] embedding = generateEmbedding(request.getName(), request.getAddress(), request.getCountry());
         logger.info("Generated embedding for entity {}: {}", request.getName(), embedding);
@@ -52,7 +49,7 @@ public class EntitySenseService {
         entity.setKnownAccounts( (request.getKnownAccounts()));
         entity.setRiskCategory(request.getRiskCategory());
         entity.setEmbedding(embedding);
-        repository.save(entity);
+        watchlistRepository.save(entity);
     }
 
     public ValidatePaymentResponse validatePayment(ValidatePaymentRequest request) {
@@ -64,7 +61,7 @@ public class EntitySenseService {
         }
         logger.info("Generated embedding for payee {}: {}", request.getPayeeName(), Arrays.toString(inputEmbedding));
 
-        List<RiskMatchResult> matches = repository.findAll().stream()
+        List<RiskMatchResult> matches = watchlistRepository.findAll().stream()
                 .map(entity -> {
                     double distance = cosineDistance(inputEmbedding, entity.getEmbedding());
                     boolean accountMatch = entity.getKnownAccounts() != null && Arrays.asList(entity.getKnownAccounts()).contains(request.getAccountNumber());
@@ -123,13 +120,6 @@ public class EntitySenseService {
             logger.error("Error generating embedding - {}", ex.getMessage());
             throw new RuntimeException("Failed to generate embedding", ex);
         }
-    }
-
-    @Data
-    @AllArgsConstructor
-    static class OllamaEmbeddingRequest {
-        private String model;
-        private String prompt;
     }
 
     private double cosineDistance(float[] a, float[] b) {

@@ -41,7 +41,7 @@ public class EntitySenseControllerTest {
 
     @Test
     public void testCreateWatchListEntityEndpoint() {
-        CreateWatchListEntityRequest request = new CreateWatchListEntityRequest();
+        WatchListEntityRequest request = new WatchListEntityRequest();
         request.setName("WatchCorp");
         request.setCountry("SG");
 

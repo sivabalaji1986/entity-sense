@@ -4,10 +4,8 @@ import com.hbs.entitysense.model.RiskCategory;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
-public class CreateWatchListEntityRequest {
+public class WatchListEntityRequest {
     @NotBlank private String name;
     private String address;
     private String country;
