@@ -83,9 +83,9 @@ public class EntitySenseService {
         logger.info("Found {} potential matches for payee {}", matches.size(), request.getPayeeName());
         ValidatePaymentResponse response = new ValidatePaymentResponse();
         response.setPossibleWatchListEntityMatches(matches);
-        response.setStatus(matches.isEmpty() ? "ALLOW" : "BLOCK");
+        response.setStatus(matches.isEmpty() ? PAYMENT_STATUS_ALLOW : PAYMENT_STATUS_BLOCK);
         if (!matches.isEmpty()) {
-            logger.warn("Payment blocked due to potential match with watch list entities {}", response);
+            logger.error("Payment blocked due to potential match with watch list entities {}", response);
         } else {
             logger.info("Payment allowed, no matches found {}", response);
         }
@@ -102,8 +102,8 @@ public class EntitySenseService {
             logger.info("JSON request for Ollama embedding: {}", json);
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(OLLAMA_URL+OLLAMA_EMBEDDINGS_URL))
-                    .timeout(Duration.ofSeconds(10))
-                    .header("Content-Type", "application/json")
+                    .timeout(Duration.ofSeconds(OLLAMA_TIMEOUT_VALUE))
+                    .header(OLLAMA_CONTENT_TYPE_KEY, OLLAMA_CONTENT_TYPE_VALUE)
                     .POST(HttpRequest.BodyPublishers.ofString(json))
                     .build();
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());

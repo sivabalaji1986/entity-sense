@@ -18,4 +18,14 @@ public class EntitySenseConstant {
 
     public static final String OLLAMA_EMBEDDINGS_REQ_PROMPT_KEY      = "prompt";
 
+    public static final String OLLAMA_CONTENT_TYPE_KEY      = "Content-Type";
+
+    public static final String OLLAMA_CONTENT_TYPE_VALUE      = "application/json";
+
+    public static final int OLLAMA_TIMEOUT_VALUE      = 10;
+
+    public static final String PAYMENT_STATUS_ALLOW       = "ALLOW";
+
+    public static final String PAYMENT_STATUS_BLOCK       = "BLOCK";
+
 }
