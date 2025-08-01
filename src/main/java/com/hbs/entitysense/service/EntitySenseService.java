@@ -76,7 +76,7 @@ public class EntitySenseService {
                     result.setKnownAccounts(entity.getKnownAccounts());
                     return result;
                 })
-                .filter(result -> result.getDistance() < 0.4 || result.isMatchedAccount())
+                .filter(result -> result.getDistance() < ENTITY_SENSE_COSINE_DISTANCE_THRESHOLD || result.isMatchedAccount())
                 .sorted(Comparator.comparingDouble(RiskMatchResult::getDistance))
                 .collect(Collectors.toList());
 
