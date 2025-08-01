@@ -28,6 +28,6 @@ public class EntitySenseConstant {
 
     public static final String PAYMENT_STATUS_BLOCK       = "BLOCK";
 
-    public static final Double ENTITY_SENSE_COSINE_DISTANCE_THRESHOLD = 0.4;
+    public static final Double ENTITY_SENSE_COSINE_DISTANCE_THRESHOLD = 0.3;
 
 }
