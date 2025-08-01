@@ -55,7 +55,7 @@ public class EntitySenseService {
     public ValidatePaymentResponse validatePayment(ValidatePaymentRequest request) {
         logger.info("Validating payment for request: {}", request);
         float[] inputEmbedding = generateEmbedding(request.getPayeeName(), request.getPayeeAddress(), request.getPayeeCountry());
-        if( inputEmbedding == null) {
+        if(inputEmbedding == null) {
             logger.error("Failed to generate embedding for payee: {}", request.getPayeeName());
             throw new RuntimeException("Failed to generate embedding for payee: " + request.getPayeeName());
         }
@@ -122,13 +122,22 @@ public class EntitySenseService {
         }
     }
 
-    private double cosineDistance(float[] a, float[] b) {
-        double dotProduct = 0.0, normA = 0.0, normB = 0.0;
-        for (int i = 0; i < a.length; i++) {
-            dotProduct += a[i] * b[i];
-            normA += Math.pow(a[i], 2);
-            normB += Math.pow(b[i], 2);
+    private double cosineDistance(float[] vectorA, float[] vectorB) {
+        if (vectorA == null || vectorB == null || vectorA.length != vectorB.length) {
+            throw new IllegalArgumentException("Invalid vectors");
         }
+
+        double dotProduct = 0.0, normA = 0.0, normB = 0.0;
+
+        for (int i = 0; i < vectorA.length; i++) {
+            dotProduct += vectorA[i] * vectorB[i];
+            normA += Math.pow(vectorA[i], 2);
+            normB += Math.pow(vectorB[i], 2);
+        }
+
+        if (normA == 0.0 || normB == 0.0) return 1.0; // Maximum distance
+
+        // EntitySense uses cosine DISTANCE (1 - similarity)
         return 1 - (dotProduct / (Math.sqrt(normA) * Math.sqrt(normB)));
     }
 
