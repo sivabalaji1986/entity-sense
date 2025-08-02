@@ -139,6 +139,7 @@ public class EntitySenseService {
         if (normA == 0.0 || normB == 0.0) return 1.0;
 
         // EntitySense uses cosine Distance (1 - cosine similarity)
+        // Formula: 1 - (A⋅B)/(||A|| × ||B||)
         return 1 - (dotProduct / (Math.sqrt(normA) * Math.sqrt(normB)));
     }
 
