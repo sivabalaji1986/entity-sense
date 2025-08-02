@@ -122,13 +122,15 @@ CREATE TABLE entitysenseschema.watchlist_entities (
 );
 
 -- =============================
--- Vector Index (HNSW)
+-- Vector Index (HNSW with Cosine Distance)
 -- =============================
--- Enables fast similarity search over the 768-dim vectors using HNSW (Hierarchical Navigable Small World) index.
--- This ensures near real-time lookups for similar entities.
+-- Enables fast approximate similarity search over 768-dimensional embeddings using
+-- HNSW (Hierarchical Navigable Small World) indexing. This index uses cosine distance
+-- — matching the cosine-based comparison logic in the EntitySense Java code.
+-- Ideal for near real-time semantic similarity matching in high-volume datasets.
 CREATE INDEX idx_watchlist_embedding_hnsw
   ON entitysenseschema.watchlist_entities
-  USING hnsw (embedding vector_l2_ops)
+  USING hnsw (embedding vector_cosine_ops)
   WITH (m = 16, ef_construction = 200);
 
 ```
