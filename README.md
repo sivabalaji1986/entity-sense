@@ -200,9 +200,9 @@ Once complete, you can verify entries in the DB or simply call:
 curl --location 'http://localhost:8688/api/validate-payment' \
 --header 'Content-Type: application/json' \
 --data '{
-    "payeeName": "Phantom Technology",
-    "payeeAddress": "Silicon",
-    "payeeCountry": "ukraine",
+    "payeeName": "Cyber Sec Limited",
+    "payeeAddress": "Teheran",
+    "payeeCountry": "Iran",
     "accountNumber": "1234567890"
 }'
 ```
