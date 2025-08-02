@@ -130,14 +130,15 @@ public class EntitySenseService {
         double dotProduct = 0.0, normA = 0.0, normB = 0.0;
 
         for (int i = 0; i < vectorA.length; i++) {
-            dotProduct += vectorA[i] * vectorB[i];
-            normA += Math.pow(vectorA[i], 2);
-            normB += Math.pow(vectorB[i], 2);
+            dotProduct += vectorA[i] * vectorB[i]; // → A ⋅ B
+            normA += Math.pow(vectorA[i], 2); // → ||A||²
+            normB += Math.pow(vectorB[i], 2); // → ||B||²
         }
 
-        if (normA == 0.0 || normB == 0.0) return 1.0; // Maximum distance
+        // Avoid division by zero if embedding is invalid, set maximum distance
+        if (normA == 0.0 || normB == 0.0) return 1.0;
 
-        // EntitySense uses cosine DISTANCE (1 - similarity)
+        // EntitySense uses cosine Distance (1 - cosine similarity)
         return 1 - (dotProduct / (Math.sqrt(normA) * Math.sqrt(normB)));
     }
 
