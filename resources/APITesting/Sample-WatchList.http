@@ -237,3 +237,15 @@ Content-Type: application/json
   "knownAccounts": ["IR5555333311"],
   "riskCategory": "SANCTION"
 }
+
+### 21) SANCTION: CyberSecure Ltd.
+POST http://localhost:8688/api/create-watch-list-entity
+Content-Type: application/json
+
+{
+  "name": "CyberSecure Ltd.",
+  "address": "No fixed address",
+  "country": "Iran",
+  "knownAccounts": ["IR5555333312"],
+  "riskCategory": "SANCTION"
+}
